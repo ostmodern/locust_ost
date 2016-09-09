@@ -245,8 +245,8 @@ def parse_options(parser=None):
     # Finalize
     # Return three-tuple of parser + the output from parse_args
     # (opt obj, args)
-    args = parser.parse_args()
-    return parser, args
+    args, unknown = parser.parse_known_args()
+    return parser, args, unknown
 
 
 def _is_package(path):
@@ -347,8 +347,7 @@ def load_locustfile(path):
 
 
 def main():
-    parser, arguments = parse_options()
-    options = arguments
+    parser, options, arguments = parse_options()
 
     # setup logging
     setup_logging(options.loglevel, options.logfile)
