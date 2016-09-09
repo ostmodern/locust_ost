@@ -218,21 +218,23 @@ def parse_options(parser=None):
         default=False,
         help="print json data of the locust classes' task execution ratio"
     )
-    
-    # Version number (optparse gives you --version but we have to do it
-    # ourselves to get -V too. sigh)
-    parser.add_argument(
-        '-V', '--version',
-        action='store_true',
-        dest='show_version',
-        default=False,
-        help="show program's version number and exit"
-    )
 
-    # Finalize
-    # Return three-tuple of parser + the output from parse_args (opt obj, args)
-    opts, args = parser.parse_args()
-    return parser, opts, args
+    if not parser:
+        # Version number (optparse gives you --version but we have to do it
+        # ourselves to get -V too. sigh)
+        parser.add_argument(
+            '-V', '--version',
+            action='store_true',
+            dest='show_version',
+            default=False,
+            help="show program's version number and exit"
+        )
+
+        # Finalize
+        # Return three-tuple of parser + the output from parse_args
+        # (opt obj, args)
+        opts, args = parser.parse_args()
+        return parser, opts, args
 
 
 def _is_package(path):
