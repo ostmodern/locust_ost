@@ -36,6 +36,7 @@ def parse_options(parser=None):
         '-H', '--host',
         dest="host",
         default=None,
+        nargs='?',
         help="Host to load test in the following format: http://10.21.32.33"
     )
 
@@ -43,6 +44,7 @@ def parse_options(parser=None):
         '--web-host',
         dest="web_host",
         default="",
+        nargs='?',
         help="Host to bind the web interface to. Defaults to '' (all interfaces)"
     )
     
@@ -51,6 +53,7 @@ def parse_options(parser=None):
         type=int,
         dest="port",
         default=8089,
+        nargs='?',
         help="Port on which to run web host"
     )
     
@@ -58,6 +61,7 @@ def parse_options(parser=None):
         '-f', '--locustfile',
         dest='locustfile',
         default='locustfile',
+        nargs='?',
         help="Python module file to import, e.g. '../other.py'. Default: locustfile"
     )
 
@@ -67,6 +71,7 @@ def parse_options(parser=None):
         action='store_true',
         dest='master',
         default=False,
+        nargs='?',
         help="Set locust to run in distributed mode with this process as master"
     )
 
@@ -76,6 +81,7 @@ def parse_options(parser=None):
         action='store_true',
         dest='slave',
         default=False,
+        nargs='?',
         help="Set locust to run in distributed mode with this process as slave"
     )
     
@@ -86,6 +92,7 @@ def parse_options(parser=None):
         type=str,
         dest='master_host',
         default="127.0.0.1",
+        nargs='?',
         help="Host or IP address of locust master for distributed load testing. Only used when running with --slave. Defaults to 127.0.0.1."
     )
     
@@ -95,6 +102,7 @@ def parse_options(parser=None):
         type=int,
         dest='master_port',
         default=5557,
+        nargs='?',
         help="The port to connect to that is used by the locust master for distributed load testing. Only used when running with --slave. Defaults to 5557. Note that slaves will also connect to the master node on this port + 1."
     )
 
@@ -104,6 +112,7 @@ def parse_options(parser=None):
         type=str,
         dest='master_bind_host',
         default="*",
+        nargs='?',
         help="Interfaces (hostname, ip) that locust master should bind to. Only used when running with --master. Defaults to * (all available interfaces)."
     )
     
@@ -113,6 +122,7 @@ def parse_options(parser=None):
         type=int,
         dest='master_bind_port',
         default=5557,
+        nargs='?',
         help="Port that locust master should bind to. Only used when running with --master. Defaults to 5557. Note that Locust will also use this port + 1, so by default the master node will bind to 5557 and 5558."
     )
 
@@ -122,6 +132,7 @@ def parse_options(parser=None):
         action='store_true',
         dest='no_web',
         default=False,
+        nargs='?',
         help="Disable the web interface, and instead start running the test immediately. Requires -c and -r to be specified."
     )
 
@@ -132,6 +143,7 @@ def parse_options(parser=None):
         type=int,
         dest='num_clients',
         default=1,
+        nargs='?',
         help="Number of concurrent clients. Only used together with --no-web"
     )
 
@@ -142,6 +154,7 @@ def parse_options(parser=None):
         type=float,
         dest='hatch_rate',
         default=1,
+        nargs='?',
         help="The rate per second in which clients are spawned. Only used together with --no-web"
     )
     
@@ -152,6 +165,7 @@ def parse_options(parser=None):
         type=int,
         dest='num_requests',
         default=None,
+        nargs='?',
         help="Number of requests to perform. Only used together with --no-web"
     )
     
@@ -162,6 +176,7 @@ def parse_options(parser=None):
         type=str,
         dest='loglevel',
         default='INFO',
+        nargs='?',
         help="Choose between DEBUG/INFO/WARNING/ERROR/CRITICAL. Default is INFO.",
     )
     
@@ -172,6 +187,7 @@ def parse_options(parser=None):
         type=str,
         dest='logfile',
         default=None,
+        nargs='?',
         help="Path to log file. If not set, log will go to stdout/stderr",
     )
     
@@ -181,16 +197,18 @@ def parse_options(parser=None):
         action='store_true',
         dest='print_stats',
         default=False,
+        nargs='?',
         help="Print stats in the console"
     )
 
     # only print summary stats
     parser.add_argument(
-       '--only-summary',
-       action='store_true',
-       dest='only_summary',
-       default=False,
-       help='Only print the summary stats'
+        '--only-summary',
+        action='store_true',
+        dest='only_summary',
+        default=False,
+        nargs='?',
+        help='Only print the summary stats'
     )
     
     # List locust commands found in loaded locust files/source files
@@ -199,6 +217,7 @@ def parse_options(parser=None):
         action='store_true',
         dest='list_commands',
         default=False,
+        nargs='?',
         help="Show list of possible locust classes and exit"
     )
     
@@ -208,6 +227,7 @@ def parse_options(parser=None):
         action='store_true',
         dest='show_task_ratio',
         default=False,
+        nargs='?',
         help="print table of the locust classes' task execution ratio"
     )
     # Display ratio table of all tasks in JSON format
@@ -216,6 +236,7 @@ def parse_options(parser=None):
         action='store_true',
         dest='show_task_ratio_json',
         default=False,
+        nargs='?',
         help="print json data of the locust classes' task execution ratio"
     )
 
@@ -227,14 +248,15 @@ def parse_options(parser=None):
             action='store_true',
             dest='show_version',
             default=False,
+            nargs='?',
             help="show program's version number and exit"
         )
 
     # Finalize
     # Return three-tuple of parser + the output from parse_args
     # (opt obj, args)
-    opts, args = parser.parse_args()
-    return parser, opts, args
+    args = parser.parse_args()
+    return parser, args
 
 
 def _is_package(path):
@@ -335,7 +357,8 @@ def load_locustfile(path):
 
 
 def main():
-    parser, options, arguments = parse_options()
+    parser, arguments = parse_options()
+    options = arguments
 
     # setup logging
     setup_logging(options.loglevel, options.logfile)
