@@ -230,11 +230,11 @@ def parse_options(parser=None):
             help="show program's version number and exit"
         )
 
-        # Finalize
-        # Return three-tuple of parser + the output from parse_args
-        # (opt obj, args)
-        opts, args = parser.parse_args()
-        return parser, opts, args
+    # Finalize
+    # Return three-tuple of parser + the output from parse_args
+    # (opt obj, args)
+    opts, args = parser.parse_args()
+    return parser, opts, args
 
 
 def _is_package(path):
